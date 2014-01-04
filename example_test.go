@@ -11,8 +11,12 @@ import (
 	"github.com/kortschak/ct"
 )
 
-var warn = (ct.Fg(ct.White) | ct.Bg(ct.Red)).Render
+var (
+	info = (ct.Fg(ct.Black) | ct.XTermFg(16) | ct.Bold).Render
+	warn = (ct.Fg(ct.White) | ct.Bg(ct.Red)).Render
+)
 
 func ExampleMode_Render() {
-	fmt.Println(warn("WARNING:"), "Danger Will Robinson!")
+	fmt.Println(warn("WARNING:"), "Danger, Will Robinson! Danger! ")
+	fmt.Println(info("INFO:"), "Doctor Smith, please. You're making the Robot very unhappy!")
 }
