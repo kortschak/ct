@@ -33,16 +33,16 @@ const (
 	White
 )
 
-// Fg returns a Mode based on the provided Color.
+// Fg returns a foreground color Mode based on the provided Color.
 func Fg(c Color) Mode { return colorSet | Mode(c)&colorMask }
 
-// Bg returns a Mode based on the provided Color.
+// Bg returns a Mode background color based on the provided Color.
 func Bg(c Color) Mode { return (colorSet | Mode(c)&colorMask) << colorWidth }
 
-// XTermFg returns a Mode based on the provided XTerm color.
+// XTermFg returns an XTerm foreground color Mode based on the provided XTerm color.
 func XTermFg(c byte) Mode { return (xTermColorSet | Mode(c)) << (2 * colorWidth) }
 
-// XTermBg returns a Mode based on the provided XTerm color.
+// XTermBg returns an XTerm background color Mode based on the provided XTerm color.
 func XTermBg(c byte) Mode { return (xTermColorSet | Mode(c)) << (2*colorWidth + xTermColorWidth) }
 
 const (
