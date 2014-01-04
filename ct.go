@@ -133,7 +133,9 @@ func doesString(v interface{}) bool {
 // Format allows text to satisfy the fmt.Formatter interface. The format
 // behaviour is the same as for fmt.Print.
 func (t text) Format(fs fmt.State, c rune) {
-	t.Mode.set(fs)
+	if t.Mode&^NoResetAfter != 0 {
+		t.Mode.set(fs)
+	}
 
 	w, wOk := fs.Width()
 	p, pOk := fs.Precision()
@@ -166,7 +168,7 @@ func (t text) Format(fs fmt.State, c rune) {
 		fmt.Fprintf(fs, format, v)
 	}
 
-	if t.Mode&NoResetAfter == 0 {
+	if t.Mode&^NoResetAfter != 0 && t.Mode&NoResetAfter == 0 {
 		t.reset(fs)
 	}
 }
