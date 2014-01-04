@@ -29,6 +29,8 @@ const (
 	resetSgr = csi + "0m"
 )
 
+var semicolon = []byte{';'}
+
 func (m Mode) set(w io.Writer) {
 	w.Write([]byte(csi))
 	if m&(colorSet|colorMask)>>(colorWidth-2) == 0x3 {
@@ -38,7 +40,7 @@ func (m Mode) set(w io.Writer) {
 	for _, d := range []Mode{30, 40} {
 		if m&colorSet != 0 {
 			if printed {
-				w.Write([]byte{';'})
+				w.Write(semicolon)
 			}
 			fmt.Fprintf(w, "%d", m&(colorMask>>1)+d)
 			printed = true
@@ -48,7 +50,7 @@ func (m Mode) set(w io.Writer) {
 	for _, d := range []int{38, 48} {
 		if m&xTermColorSet != 0 {
 			if printed {
-				w.Write([]byte{';'})
+				w.Write(semicolon)
 			}
 			fmt.Fprintf(w, "%d;5;%d", d, m&xTermColorMask)
 			printed = true
@@ -58,7 +60,7 @@ func (m Mode) set(w io.Writer) {
 	for _, v := range modeTable {
 		if m&1 != 0 {
 			if printed {
-				w.Write([]byte{';'})
+				w.Write(semicolon)
 			}
 			fmt.Fprintf(w, "%d", v)
 			printed = true
