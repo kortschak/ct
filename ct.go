@@ -36,7 +36,7 @@ const (
 // Fg returns a foreground color Mode based on the provided Color.
 func Fg(c Color) Mode { return colorSet | Mode(c)&colorMask }
 
-// Bg returns a Mode background color based on the provided Color.
+// Bg returns a background color Mode based on the provided Color.
 func Bg(c Color) Mode { return (colorSet | Mode(c)&colorMask) << colorWidth }
 
 // XTermFg returns an XTerm foreground color Mode based on the provided XTerm color.
