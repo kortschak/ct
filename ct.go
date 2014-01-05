@@ -55,6 +55,9 @@ const (
 	xTermColorMask  = xTermColorSet - 1
 
 	colorBits = 2*colorWidth + 2*xTermColorWidth // Fg + Bg + XtermFg + XtermBg
+
+	activeBits = ^Mode(0)&^(1<<colorBits-1)&^NoResetAfter |
+		colorSet | colorSet<<colorWidth | xTermColorSet<<(2*colorWidth) | xTermColorSet<<(2*colorWidth+xTermColorWidth)
 )
 
 // Mode specifies terminal rendering modes via its Render method. Modes should be bitwise or'd together.
@@ -133,7 +136,7 @@ func doesString(v interface{}) bool {
 // Format allows text to satisfy the fmt.Formatter interface. The format
 // behaviour is the same as for fmt.Print.
 func (t text) Format(fs fmt.State, c rune) {
-	if t.Mode&^NoResetAfter != 0 {
+	if t.Mode&activeBits != 0 {
 		t.Mode.set(fs)
 	}
 
@@ -168,7 +171,7 @@ func (t text) Format(fs fmt.State, c rune) {
 		fmt.Fprintf(fs, format, v)
 	}
 
-	if t.Mode&^NoResetAfter != 0 && t.Mode&NoResetAfter == 0 {
+	if t.Mode&activeBits != 0 && t.Mode&NoResetAfter == 0 {
 		t.reset(fs)
 	}
 }
