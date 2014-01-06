@@ -29,6 +29,8 @@ const (
 	resetSgr = csi + "0m"
 )
 
+func hook(fs fmt.State) fmt.State { return fs }
+
 var semicolon = []byte{';'}
 
 func (m Mode) set(w io.Writer) {

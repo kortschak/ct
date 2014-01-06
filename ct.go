@@ -137,6 +137,7 @@ func doesString(v interface{}) bool {
 // behaviour is the same as for fmt.Print.
 func (t text) Format(fs fmt.State, c rune) {
 	if t.Mode&activeBits != 0 {
+		fs = hook(fs)
 		t.Mode.set(fs)
 	}
 
