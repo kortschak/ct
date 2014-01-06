@@ -42,7 +42,7 @@ var testModesToANSI = []struct {
 
 func TestRenderToANSI(t *testing.T) {
 	for _, tt := range testModesToANSI {
-		got := fmt.Sprint(tt.mode.Render(tt.params...))
+		got := fmt.Sprint(tt.mode.Paint(tt.params...))
 		if got != tt.want {
 			t.Errorf("Render to ANSI got: %q want: %q", got, tt.want)
 		}

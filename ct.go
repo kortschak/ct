@@ -107,9 +107,9 @@ const (
 	crossedOut
 )
 
-// Render returns a fmt.Formatter that will apply the mode to the
+// Paint returns a fmt.Formatter that will apply the mode to the
 // printed values of the parameters.
-func (m Mode) Render(v ...interface{}) fmt.Formatter {
+func (m Mode) Paint(v ...interface{}) fmt.Formatter {
 	return text{Mode: m, v: v}
 }
 
