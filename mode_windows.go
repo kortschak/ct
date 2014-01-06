@@ -5,7 +5,7 @@
 // +build !ansi
 
 // BUG(kortschak): The behavior of ct on Windows platforms attempts to reasonably
-// closely mimic the behavior on ASNI terminals, but because of the disjointed
+// closely mimic the behavior on ANSI terminals, but because of the disjointed
 // approach to console control in Windows, it is currently not possible to decorate
 // output to both standard output and standard error; only standard output is
 // supported.
