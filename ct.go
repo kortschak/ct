@@ -172,7 +172,7 @@ func (t text) Format(fs fmt.State, c rune) {
 		fmt.Fprintf(fs, format, v)
 	}
 
-	if t.Mode&activeBits != 0 && t.Mode&NoResetAfter == 0 {
+	if t.Mode&activeBits != 0 && t.Mode&activeBits != Reset && t.Mode&NoResetAfter == 0 {
 		t.reset(fs)
 	}
 }

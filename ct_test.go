@@ -25,6 +25,7 @@ var testModesToANSI = []struct {
 	want   string
 }{
 	{0, par("Hello, 世界"), "Hello, 世界"},
+	{Reset, par("Hello, 世界"), "\x1b[0mHello, 世界"},
 	{NoResetAfter, par("Hello, 世界"), "Hello, 世界"},
 	{0xf, par("Hello, 世界"), "Hello, 世界"},
 	{0xf << colorWidth, par("Hello, 世界"), "Hello, 世界"},
