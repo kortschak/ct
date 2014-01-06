@@ -7,8 +7,9 @@
 // BUG(kortschak): The behavior of ct on Windows platforms attempts to reasonably
 // closely mimic the behavior on ANSI terminals, but because of the disjointed
 // approach to console control in Windows, it is currently not possible to decorate
-// output to both standard output and standard error; only standard output is
-// supported.
+// output to console standard output and standard error differentially; only standard
+// output is directly supported. This means that if os.Stderr is printed to CONOUT$,
+// ct will work as expected, but will not if it is not.
 package ct
 
 import (
