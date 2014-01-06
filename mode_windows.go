@@ -69,6 +69,7 @@ func (c console) setConsoleTextAttribute(attr uint16) {
 type state struct {
 	fmt.State
 	console
+	attr uint16
 }
 
 func hook(fs fmt.State) fmt.State {
@@ -83,6 +84,7 @@ func hook(fs fmt.State) fmt.State {
 	if i == nil {
 		return fs
 	}
+	s.attr = i.wAttributes
 
 	attrLock.Lock()
 	if _, ok := consoleAttrs[s.console]; !ok {
@@ -99,7 +101,7 @@ const (
 )
 
 func (m Mode) set(w io.Writer) {
-	if m&(colorSet|(colorSet<<colorWidth)|Negative|Underline) == 0 {
+	if m&(colorSet|(colorSet<<colorWidth)|Reset|Bold|Negative|Underline) == 0 {
 		return
 	}
 	s, ok := w.(state)
@@ -107,26 +109,47 @@ func (m Mode) set(w io.Writer) {
 		return
 	}
 
-	attr := uint16((m & colorMask) | ((m & (colorMask << colorWidth)) >> 1))
+	if m&Reset != 0 {
+		attrLock.Lock()
+		s.setConsoleTextAttribute(consoleAttrs[s.console])
+		if m&activeBits == Reset {
+			delete(consoleAttrs, s.console)
+		}
+		attrLock.Unlock()
+	}
 
+	if m&colorSet != 0 {
+		s.attr &^= colorMask
+		s.attr |= uint16(m & colorMask)
+	}
+	if m&(colorSet<<colorWidth) != 0 {
+		s.attr &^= colorMask << (colorWidth - 1)
+		s.attr |= uint16(m&(colorMask<<colorWidth)) >> 1
+	}
+
+	if m&Bold != 0 {
+		s.attr |= 1 << (colorWidth - 1)
+	}
 	if m&Negative != 0 {
-		attr |= reverse
+		s.attr |= reverse
 	}
 	if m&Underline != 0 {
-		attr |= underscore
+		s.attr |= underscore
 	}
 
-	s.setConsoleTextAttribute(attr)
+	s.setConsoleTextAttribute(s.attr)
 }
 
 func (m Mode) reset(w io.Writer) {
-	if m&(colorSet|(colorSet<<colorWidth)|Negative|Underline) == 0 {
+	if m&(colorSet|(colorSet<<colorWidth)|Bold|Negative|Underline) == 0 {
 		return
 	}
 	if s, ok := w.(state); ok {
 		attrLock.Lock()
-		s.setConsoleTextAttribute(consoleAttrs[s.console])
-		delete(consoleAttrs, s.console)
-		attrLock.Unlock()
+		if attr, ok := consoleAttrs[s.console]; ok {
+			s.setConsoleTextAttribute(attr)
+			delete(consoleAttrs, s.console)
+			attrLock.Unlock()
+		}
 	}
 }
