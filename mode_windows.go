@@ -24,13 +24,17 @@ const stdoutHandle = -11
 
 func dword(i int) uintptr { return uintptr(uint32(i)) }
 
+type caller interface {
+	Call(a ...uintptr) (r1, r2 uintptr, lastErr error)
+}
+
 var (
 	kernel32 = syscall.NewLazyDLL("kernel32.dll")
 
-	getStdHandle = kernel32.NewProc("GetStdHandle")
+	getStdHandle caller = kernel32.NewProc("GetStdHandle")
 
-	getConsoleScreenBufferInfo = kernel32.NewProc("GetConsoleScreenBufferInfo")
-	setConsoleTextAttribute    = kernel32.NewProc("SetConsoleTextAttribute")
+	getConsoleScreenBufferInfo caller = kernel32.NewProc("GetConsoleScreenBufferInfo")
+	setConsoleTextAttribute    caller = kernel32.NewProc("SetConsoleTextAttribute")
 )
 
 type (
