@@ -2,7 +2,7 @@
 // Use of this source code is governed by a BSD-style
 // license that can be found in the LICENSE file.
 
-// Package ct provides terminal text coloring and decoration support.
+// Package ct provides ANSI terminal text coloring and decoration support.
 package ct
 
 import (
@@ -137,7 +137,6 @@ func doesString(v interface{}) bool {
 // behaviour is the same as for fmt.Print.
 func (t text) Format(fs fmt.State, c rune) {
 	if t.Mode&activeBits != 0 {
-		fs = hook(fs)
 		t.Mode.set(fs)
 	}
 
