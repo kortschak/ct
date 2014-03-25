@@ -4,6 +4,8 @@
 
 // gopher.png Copyright ©2009 The Go Authors. All rights reserved.
 // Used under the Go LICENSE available at http://golang.org/LICENSE
+// Gopher artwork originally by Renée French. Used under the Creative
+// Commons Attributions 3.0 license.
 
 // +build ignore
 
